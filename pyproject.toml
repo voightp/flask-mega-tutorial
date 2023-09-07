@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "flaskmegatutorial"
+version = "0.1.0"
+description = ""
+authors = ["voightp <vojtechpanek@seznam.cz>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flask = "^2.3.3"
+flask-wtf = "^1.1.1"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+flake8 = "^6.1.0"
+pre-commit = "^3.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
