@@ -12,7 +12,7 @@ def index():
         {"author": {"username": "John"}, "body": "Beautiful day in Portland!"},
         {"author": {"username": "Susan"}, "body": "The Avengers movie was so cool!"},
     ]
-    return render_template(url_for("index.html"), title="Home", user=user, posts=posts)
+    return render_template("index.html", title="Home", user=user, posts=posts)
 
 
 @flask_app.route("/login", methods=["GET", "POST"])
@@ -24,5 +24,5 @@ def login():
                 form.username.data, form.remember_me.data
             )
         )
-        return redirect("/index")
+        return redirect(url_for("index"))
     return render_template("login.html", title="Sign In", form=form)
