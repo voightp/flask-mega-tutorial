@@ -2,11 +2,13 @@ from __future__ import annotations
 
 from datetime import datetime
 from hashlib import md5
+from time import time
 
+import jwt
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app import db, login
+from app import db, flask_app, login
 
 
 @login.user_loader
@@ -68,6 +70,23 @@ class User(db.Model, UserMixin):
         ).filter(followers.c.follower_id == self.id)
         own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
+
+    def get_reset_password_token(self, expires_in: int = 600) -> bytes:
+        return jwt.encode(
+            {"reset_password": self.id, "exp": time() + expires_in},
+            flask_app.config["SECRET_KEY"],
+            algorithm="HS256",
+        )
+
+    @staticmethod
+    def verify_reset_password_token(token: bytes) -> User | None:
+        try:
+            id = jwt.decode(
+                token, flask_app.config["SECRET_KEY"], algorithms=["HS256"]
+            )["reset_password"]
+        except:  # noqa: E722
+            return None
+        return User.query.get(id)
 
 
 class Post(db.Model):
