@@ -5,14 +5,14 @@ import pytest
 
 os.environ["DATABASE_URL"] = "sqlite://"
 
-from app import db, flask_app  # noqa: E402
+from app import app, db  # noqa: E402
 from app.models import Post, User  # noqa: E402
 
 
 class TestUser:
     @pytest.fixture(autouse=True)
     def set_up(self):
-        app_context = flask_app.app_context()
+        app_context = app.app_context()
         app_context.push()
         db.create_all()
         yield
