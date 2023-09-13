@@ -1,17 +1,21 @@
-import os
 from datetime import datetime, timedelta
 
 import pytest
 
-os.environ["DATABASE_URL"] = "sqlite://"
+from app import create_app, db
+from app.models import Post, User
+from config import Config
 
-from app import app, db  # noqa: E402
-from app.models import Post, User  # noqa: E402
+
+class TestConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = "sqlite://"
 
 
 class TestUser:
     @pytest.fixture(autouse=True)
     def set_up(self):
+        app = create_app(TestConfig)
         app_context = app.app_context()
         app_context.push()
         db.create_all()
