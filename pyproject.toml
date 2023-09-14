@@ -21,6 +21,7 @@ flask-moment = "^1.0.5"
 flask-babel = "^3.1.0"
 langdetect = "^1.0.9"
 requests = "^2.31.0"
+elasticsearch = "^8.9.0"
 
 
 [tool.poetry.group.dev.dependencies]
