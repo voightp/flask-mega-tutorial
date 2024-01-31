@@ -17,9 +17,7 @@ class SearchableMixin:
         ids, total = query_index(cls.__tablename__, expression, page, per_page)
         if total == 0:
             return cls.query.filter_by(id=0), 0
-        when = []
-        for i in range(len(ids)):
-            when.append((ids[i], i))
+        when = [(ids[i], i) for i in range(len(ids))]
         return (
             cls.query.filter(cls.id.in_(ids)).order_by(db.case(*when, value=cls.id)),
             total,
@@ -77,7 +75,7 @@ class User(UserMixin, db.Model):
     )
 
     def __repr__(self):
-        return "<User {}>".format(self.username)
+        return f"<User {self.username}>"
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -87,9 +85,7 @@ class User(UserMixin, db.Model):
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode("utf-8")).hexdigest()
-        return "https://www.gravatar.com/avatar/{}?d=identicon&s={}".format(
-            digest, size
-        )
+        return f"https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}"
 
     def follow(self, user):
         if not self.is_following(user):
@@ -142,7 +138,7 @@ class Post(SearchableMixin, db.Model):
     language = db.Column(db.String(5))
 
     def __repr__(self):
-        return "<Post {}>".format(self.body)
+        return f"<Post {self.body}>"
 
 
 db.event.listen(db.session, "before_commit", SearchableMixin.before_commit)

@@ -14,10 +14,7 @@ def translate(text, source_language, dest_language):
         "Ocp-Apim-Subscription-Region": "westus2",
     }
     r = requests.post(
-        "https://api.cognitive.microsofttranslator.com"
-        "/translate?api-version=3.0&from={}&to={}".format(
-            source_language, dest_language
-        ),
+        f"https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&from={source_language}&to={dest_language}",
         headers=auth,
         json=[{"Text": text}],
     )
